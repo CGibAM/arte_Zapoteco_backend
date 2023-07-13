@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.proyecto_integrador.casa_textil.entities.Usuario;
@@ -18,7 +19,8 @@ import com.proyecto_integrador.casa_textil.service.UserService;
 import com.proyecto_integrador.casa_textil.utils.LoginRequest;
 import com.proyecto_integrador.casa_textil.utils.UsuarioNoEncontrado;
 
-@CrossOrigin(origins = "http://127.0.0.1:5505")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, 
+		RequestMethod.DELETE, RequestMethod.PUT})
 @RestController
 @RequestMapping("/user")
 public class UserController {
