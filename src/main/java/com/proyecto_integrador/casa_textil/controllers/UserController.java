@@ -37,7 +37,7 @@ public class UserController {
 	//Método PUT para modificar un producto
 		@PutMapping (path="{userId}") //path para agregarle el id al endpoint
 		
-		public Usuario updateUsuario(@PathVariable("userId") Long id, 
+		public Usuario updateUsuario(@PathVariable("userId") Integer id, 
 				@RequestParam(required = false) String name,      
 				@RequestParam(required = false) String phoneNumber, 
 				@RequestParam(required = false) String email, 
@@ -68,10 +68,8 @@ public class UserController {
 	}
 
 	@DeleteMapping(path = "/{userId}")
-	public Usuario deleteUsuario(@PathVariable("userId") Long id) {
-
+	public Usuario deleteUsuario(@PathVariable("userId") Integer id) {
 		return userService.deleteUsuario(id);
-
 	}
 
 	@GetMapping
