@@ -1,5 +1,7 @@
 package com.proyecto_integrador.casa_textil.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +34,27 @@ public class UserService {
 		usuario.setCartIdCart(mergedCart);
 		return userRepository.save(usuario);
 	}
+	
+	
+public Usuario deleteUsuario (Long id) {
+		
+		Usuario userTemporal = null;
+		
+		if (userRepository.existsById(id)) {
+			
+			userTemporal = userRepository.findById(id).get();
+			userRepository.deleteById(id);			
+		}
+		
+		return userTemporal;
+			
+	}
+
+public List <Usuario> leerTodosLosUsuarios(){
+	
+	return userRepository.findAll();
+	
+}
+	
 
 }
