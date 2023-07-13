@@ -34,23 +34,6 @@ public class UserController {
 		return userService.postUsuario(usuario);
 	}
 	
-	//Método PUT para modificar un producto
-		@PutMapping (path="{userId}") //path para agregarle el id al endpoint
-		
-		public Usuario updateUsuario(@PathVariable("userId") Integer id, 
-				@RequestParam(required = false) String name,      
-				@RequestParam(required = false) String phoneNumber, 
-				@RequestParam(required = false) String email, 
-				@RequestParam(required = false) String address,
-				@RequestParam(required = false) Integer discount,
-				@RequestParam(required = false) Boolean newCostumer,
-				@RequestParam(required = false) String password) {
-			
-			return userService.actualizarUsuario(id, name, phoneNumber, email, address, discount, newCostumer, password);
-			
-		}//updateProducto
-		
-
 	@PostMapping(path = "/login", consumes = "application/json")
 	public ResponseEntity<String> loginUsuario(@RequestBody LoginRequest loginrequest) {
 		try {
@@ -66,6 +49,22 @@ public class UserController {
 		}
 
 	}
+	
+	@GetMapping("/login/{id}")
+	public String getNombreUsuario(@PathVariable Integer id) {
+		return userService.readLoggedUser(id).getName();
+	}
+	
+	// Método PUT para modificar un producto
+	@PutMapping(path = "{userId}") // path para agregarle el id al endpoint
+	public Usuario updateUsuario(@PathVariable("userId") Integer id, @RequestParam(required = false) String name,
+			@RequestParam(required = false) String phoneNumber, @RequestParam(required = false) String email,
+			@RequestParam(required = false) String address, @RequestParam(required = false) Integer discount,
+			@RequestParam(required = false) Boolean newCostumer, @RequestParam(required = false) String password) {
+
+		return userService.actualizarUsuario(id, name, phoneNumber, email, address, discount, newCostumer, password);
+
+	}// updateProducto
 
 	@DeleteMapping(path = "/{userId}")
 	public Usuario deleteUsuario(@PathVariable("userId") Integer id) {

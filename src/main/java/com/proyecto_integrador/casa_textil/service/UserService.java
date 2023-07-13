@@ -35,6 +35,10 @@ public class UserService {
 	public Usuario validateEmail(String email) {
 		return userRepository.getByEmail(email).orElseThrow(() -> new UsuarioNoEncontrado("Usuario no encontrado"));
 	}
+	
+	public Usuario readLoggedUser(Integer id) {
+		return userRepository.findById(id).get();
+	}
 
 //Método para modificar un producto
 	public Usuario actualizarUsuario(Integer id, String name, String phoneNumber, String email, String address,
