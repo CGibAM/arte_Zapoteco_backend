@@ -39,6 +39,37 @@ public class UserService {
 		return userRepository.getByEmail(email).orElseThrow(() -> new UsuarioNoEncontrado("Usuario no encontrado"));
 	}
 
+//Método para modificar un producto
+public Usuario actualizarUsuario(Long id, String name, String phoneNumber, String email, String address, Integer discount, Boolean newCostumer,
+		String password) {
+	Usuario userTemporal = null; //declaro producto temporal ccon valor nulo, para que sirva conmo mi calca
+	//Si el producto existe, lo modifico
+	if(userRepository.existsById(id)) { //true
+		//hago la modificacion de los parámetros
+		
+		userTemporal= userRepository.findById(id).get(); 
+		if (name!=null) userTemporal.setName(name);
+		if (phoneNumber!=null) userTemporal.setPhoneNumber(phoneNumber);
+		if(email!=null) userTemporal.setEmail(email);
+		if(address!=null) userTemporal.setAddress(address);
+		if(discount!=null) userTemporal.setDiscount(discount);
+		if(newCostumer!=null) userTemporal.setNewCostumer(newCostumer);
+		if(password!=null) userTemporal.setPassword(password);
+		userRepository.save(userTemporal);
+	} else {
+		//Si el producto no existe, no lo puedo modificar y mando un mensaje que dice "El producto no existe".
+		System.out.println("El usuario que quieres actualizar, no existe");
+	}
+	
+	return userTemporal; //nulo o el producto modificado
+}//actualizarProducto
+
+public List <Usuario> leerTodosLosUsuarios(){
+	
+	return userRepository.findAll();
+	
+}
+	
 	public Usuario deleteUsuario(Long id) {
 
 		Usuario userTemporal = null;
@@ -52,10 +83,7 @@ public class UserService {
 		return userTemporal;
 	}
 
-	public List<Usuario> leerTodosLosUsuarios() {
 
-		return userRepository.findAll();
 
-	}
 
 }

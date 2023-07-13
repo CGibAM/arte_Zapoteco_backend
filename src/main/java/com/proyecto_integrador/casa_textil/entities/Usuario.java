@@ -44,12 +44,12 @@ public class Usuario {
 	private Cart cartIdCart;
 
 	//Constructores
-	public Usuario(String name, String phoneNumber, String email, String adress, Integer discount, Boolean newCostumer,
+	public Usuario(String name, String phoneNumber, String email, String address, Integer discount, Boolean newCostumer,
 			String password) {
 		this.name = name;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
-		this.address = adress;
+		this.address = address;
 		this.discount = discount;
 		this.newCostumer = newCostumer;
 		this.password = password;
