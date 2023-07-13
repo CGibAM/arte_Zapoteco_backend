@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.proyecto_integrador.casa_textil.entities.Cart;
 import com.proyecto_integrador.casa_textil.entities.Usuario;
 import com.proyecto_integrador.casa_textil.repositories.UserRepository;
+import com.proyecto_integrador.casa_textil.utils.UsuarioNoEncontrado;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -31,6 +32,10 @@ public class UserService {
 		Cart mergedCart = entityManager.merge(cart);
 		usuario.setCartIdCart(mergedCart);
 		return userRepository.save(usuario);
+	}
+	
+	public Usuario validateEmail(String email) {
+		return userRepository.getByEmail(email).orElseThrow(()-> new UsuarioNoEncontrado("Usuario no encontrado"));
 	}
 
 }
