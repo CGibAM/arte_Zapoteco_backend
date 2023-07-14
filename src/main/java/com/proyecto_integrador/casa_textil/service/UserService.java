@@ -1,12 +1,13 @@
 package com.proyecto_integrador.casa_textil.service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.proyecto_integrador.casa_textil.entities.Cart;
 import com.proyecto_integrador.casa_textil.entities.Usuario;
 import com.proyecto_integrador.casa_textil.repositories.UserRepository;
-import com.proyecto_integrador.casa_textil.utils.UsuarioNoEncontrado;
+import com.proyecto_integrador.casa_textil.utils.UsuarioException;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
@@ -25,17 +26,22 @@ public class UserService {
 	}
 
 	@Transactional
-	public Usuario postUsuario(Usuario usuario) {
-		usuario.setId(null);
-		Cart mergedCart = entityManager.merge(cart);
-		usuario.setCartIdCart(mergedCart);
-		return userRepository.save(usuario);
+	public Usuario postUsuario(Usuario usuario) throws SQLIntegrityConstraintViolationException {
+		try {
+			validateEmail(usuario.getEmail());
+			throw new SQLIntegrityConstraintViolationException();
+		}catch(UsuarioException e) {
+			usuario.setId(null);
+			Cart mergedCart = entityManager.merge(cart);
+			usuario.setCartIdCart(mergedCart);
+			return userRepository.save(usuario);
+		}
 	}
 
 	public Usuario validateEmail(String email) {
-		return userRepository.getByEmail(email).orElseThrow(() -> new UsuarioNoEncontrado("Usuario no encontrado"));
+		return userRepository.getByEmail(email).orElseThrow(() -> new UsuarioException("Usuario no encontrado"));
 	}
-	
+
 	public Usuario readLoggedUser(Integer id) {
 		return userRepository.findById(id).get();
 	}
