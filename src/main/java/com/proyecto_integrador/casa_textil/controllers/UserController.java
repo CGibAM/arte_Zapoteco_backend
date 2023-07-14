@@ -2,6 +2,8 @@ package com.proyecto_integrador.casa_textil.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.proyecto_integrador.casa_textil.entities.Usuario;
 import com.proyecto_integrador.casa_textil.service.UserService;
 import com.proyecto_integrador.casa_textil.utils.LoginRequest;
-import com.proyecto_integrador.casa_textil.utils.UsuarioNoEncontrado;
+import com.proyecto_integrador.casa_textil.utils.UsuarioException;
 
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, 
 		RequestMethod.DELETE, RequestMethod.PUT})
@@ -32,8 +34,17 @@ public class UserController {
 	}
 
 	@PostMapping(consumes = "application/json")
-	public Usuario postUsuario(@RequestBody Usuario usuario) {
-		return userService.postUsuario(usuario);
+	public ResponseEntity<String> postUsuario(@RequestBody Usuario usuario) throws SQLIntegrityConstraintViolationException {
+		try {
+			if(usuario.getPassword().length()>=8) {
+				userService.postUsuario(usuario);
+				return ResponseEntity.ok().body("Usuario creado exitosamente");
+			}else {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Contraseña de longitud incorrecta");
+			}
+		}catch(SQLIntegrityConstraintViolationException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("El usuario ya existe");
+		}
 	}
 	
 	@PostMapping(path = "/login", consumes = "application/json")
@@ -46,7 +57,7 @@ public class UserController {
 			} else {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
 			}
-		} catch (UsuarioNoEncontrado e) {
+		} catch (UsuarioException e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado");
 		}
 
